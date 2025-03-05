@@ -11,6 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@types/pg": "^8.11.11",
+    "pg": "^8.13.3",
     "typescript": "^5.8.2"
   }
 }
