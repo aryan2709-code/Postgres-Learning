@@ -81,4 +81,12 @@ app.get("/better-metadata-2" , async(req,res) => {
         response : response.rows
     })
 })
+// There are multiple types of joins - left join , right join , inner-join , full-join
+// Inner-join - Returns rows when there is atleast one match in both tables. if there is no match , no rows are returned
+// Left-join : Returns all rows from the left-side , and the matched rows from the right side . If something doesn't exist on the right side , 
+// the corresponding columns will be left empty 
+// Right-Join : Self-explanatory
+// Full-Join : returns all the rows , both from the left-side and the right side , any missing entry , either from the 
+// left side or the right side , will be null in the final join result
+
 app.listen(3000);
