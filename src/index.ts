@@ -28,6 +28,7 @@ app.post("/signup" , async(req , res) => {
 
     const response = await pgClient.query(insertQuery , [username , email , password] );
     const userId = response.rows[0].id;
+    await new Promise(x => setTimeout(x , 100*1000)) ; // Stop the control for 100s
     const adresponse = await pgClient.query(addressInsertQuery , [city , country , street , pincode , userId])
 
     await pgClient.query("COMMIT;")
