@@ -20,13 +20,19 @@ app.post("/signup" , async(req , res) => {
     try{
           // SQL Injection
         const insertQuery = `INSERT INTO users (username , email , password) VALUES ($1 , $2 , $3) RETURNING id ; `
-    const response = await pgClient.query(insertQuery , [username , email , password] );
-    // Lets try to log the response , as we need to get the user_id in order to maintain a foreign key relationship with the addresses table 
-    console.log(response);
-    const userId = response.rows[0].id;
+        const addressInsertQuery = `INSERT INTO addresses (city , country , street, pincode , user_id ) VALUES ($1 , $2 , $3 , $4 , $5); `
+        // Transactions in SQL : When a set of queries are to be made one after the another , it is advised to wrap them in a transaction , 
+        // so that even if one of the queries fail , the changes made by the rest of the queries are reverted and the USER IS NOT PARTIALLY REGISTERED
 
-    const addressInsertQuery = `INSERT INTO addresses (city , country , street, pincode , user_id ) VALUES ($1 , $2 , $3 , $4 , $5); `
-     const adresponse = await pgClient.query(addressInsertQuery , [city , country , street , pincode , userId])
+    await pgClient.query("BEGIN;")
+
+    const response = await pgClient.query(insertQuery , [username , email , password] );
+    const userId = response.rows[0].id;
+    const adresponse = await pgClient.query(addressInsertQuery , [city , country , street , pincode , userId])
+
+    await pgClient.query("COMMIT;")
+
+
     res.json({
         message : "You have signed up"
     })
