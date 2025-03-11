@@ -73,4 +73,12 @@ app.get("/better-metadata" , async(req , res) => {
     })
 })
 
+app.get("/better-metadata-2" , async(req,res) => {
+    const id = req.query.id;
+    const query = `SELECT u.id , u.username , u.email , a.city , a.country , a.street , a.pincode  FROM users u JOIN addresses a ON u.id = a.user_id WHERE u.id = $1 ;`
+    const response = await pgClient.query(query , [id]);
+    res.json({
+        response : response.rows
+    })
+})
 app.listen(3000);
